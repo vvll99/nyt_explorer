@@ -12,19 +12,39 @@
 
 <body>
     <h1>NYT Explorer</h1>
-    Year: <input type = "number" id = 'year'>
-  Month: <input type = "number" id = 'month'>  
-    <button onclick="find()">Find</button>
     <div id="root"></div>
     <script type="text/babel">
+
+
+
+
 
       class App extends React.Component {
         
         constructor(props){
           super(props);
-          this.state = {'urls': []};
+          this.state = {'urls': [], 
+                        'year': '',
+                        'month': ''
+                       };
           this.onSuccess = this.onSuccess.bind(this);
+          this.handleChangeYear = this.handleChangeYear.bind(this);
+          this.handleChangeMonth = this.handleChangeMonth.bind(this);
         }
+          
+          handleChangeYear(event) {
+              this.setState({year: event.target.value});
+              console.log(this.state.year)
+  }
+          
+          handleChangeMonth(event) {
+              this.setState({month: event.target.value}); 
+  }
+          handleFind(event){
+              //  event.preventDefault();
+             alert('this' + this.state.month )
+          
+          }
 
         onSuccess(responseData) {
           let urls = [];
@@ -39,7 +59,7 @@
 
         componentDidMount(){
           $.ajax({
-              url: 'https://api.nytimes.com/svc/archive/v1/2018/1.json',   
+              url: "https://api.nytimes.com/svc/archive/v1/" + this.state.year+ "/" + this.state.month + ".json",  
               method: 'GET',
               data: {
                   'api-key': "9b98b8d3102b4c98b7c14e81de2e368e"
@@ -49,7 +69,19 @@
         }
 
         render(){
-          return <Urls data={this.state.urls}/>;
+           return(
+               <form onSubmit = {this.handleFind}>
+                <label>
+                    Year: <input type = "number" id = 'year' onChange = {this.handleChangeYear}/>
+                </label>
+                <label>
+                    Month: <input type = "number" id = 'month' onChange = {this.handleChangeMonth}/>
+                </label> 
+                <input type="submit" value="Find"  />
+               <div>{<Urls urls={this.state.urls}/>}</div>
+            </form> 
+         // return <Urls data={this.state.urls}/>;
+               )
         }
 
       }
@@ -58,7 +90,7 @@
         return (
           <div> 
             {
-              props.data.map(
+              props.urls.map(
                 (url, index) => <Url key={index} url={url}/>
               )
             }
@@ -67,22 +99,6 @@
       }
 
 
-//        class bla extends rea{
-//            render() {
-//                return (div)
-//            }
-//        }
-//
-//        
-//        const bla = (props) => (div)
-//        
-//        const bla = function(props) {return (div)}
-
-
-
-//      function Url(props){
-//        return <p><a href={props.url} target="_blank">{props.url}</a></p>;
-//      }
 
       class Url extends React.Component{
           
@@ -115,8 +131,8 @@
               url: 'http://api.linkpreview.net',  
               method: 'GET',
               data: {
-                  'key': "5a8de33f3e9b1a8c4c731ee7934db1530bd8866afdc48",
-                  'q': this.props.url
+                  'key': "123456",
+                  'q': 'https://www.google.com'
               },
               success: this.onSuccess
           });
@@ -135,10 +151,10 @@
         }
         
 
-      function find(){
-        const root = document.getElementById('root');    
+      
+        const root = document.getElementById('root');   
         ReactDOM.render(<App />,  root);
-      }
+      
 
     </script>
 </body>
