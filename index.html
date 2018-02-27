@@ -45,17 +45,47 @@
         
         constructor(props){
               super(props);
-              this.state = {'urls': [], 
+              this.state = {'articles': [], 
                             'year': '',
-                            'month': ''
+                            'month': '', 
+                            selectedArticle: {
+                                   
+                                   byline: {person: [{'organization':'','role':'','rank':'','firstname':'','lastname':''}], 
+                                            original: ''},
+                                   keywords: [{value:'', name: '', rank: ''}],
+                                   headline: {main: '',
+                                              kicker: ''},
+                                   word_count: '',
+                                   pub_date: '',
+                                   web_url: '',
+
+                           }
+                             
                            };
               this.onSuccess = this.onSuccess.bind(this);
               this.handleChangeYear = this.handleChangeYear.bind(this);
               this.handleChangeMonth = this.handleChangeMonth.bind(this);
-              this.handleFind = this.handleFind.bind(this);
+              this.handleFind = this.handleFind.bind(this);            
+             this.handleArticleDetails = this.handleArticleDetails.bind(this);
+             
             }
 
-              handleChangeYear(event) {
+           handleArticleDetails(item){
+               console.log(item)
+                // debugger;
+                console.log("Hello from handleTableRowClick!");
+                // dodajemo ovde ispis u konzolu item-a
+                // item cemo prvo da stringifikujemo
+                console.log(JSON.stringify(item));
+                // probajte i console.log(JSON.stringify(item,null,2)); za lepsi ispis
+
+                //predajemo stanje Page-u
+                this.setState({selectedArticle: item});
+                               
+            }
+
+         
+           handleChangeYear(event) {
 //                  debugger;
                   this.setState({year: event.target.value});
 //                  console.log(this.state.year)
@@ -71,14 +101,14 @@
               }
           
         onSuccess(responseData) {
-          let urls = [];
-            console.log(urls)
+          let articles = [];
+            console.log(articles)
           for(var i = 0; i < 2; i++) {
             const doc = responseData.response.docs[i];
               console.log(doc)
-            urls.push(doc.web_url);
+            articles.push(doc);
           }
-          this.setState({'urls': urls});
+          this.setState({'articles': articles});
         }
 
         componentDidUpdate(prevProps, prevState){
@@ -107,6 +137,7 @@
                   'api-key': "9b98b8d3102b4c98b7c14e81de2e368e"
               },
               success: this.onSuccess
+              
           });
         }
           
@@ -123,26 +154,53 @@
                     Month: <input type = "number" id = 'month' onChange = {this.handleChangeMonth}/>
                 </label> 
                 <input type="submit" value="Find"  />
-                <div> {<Urls urls={this.state.urls}/>} </div>
+                <div> 
+                    {<Articles articles={this.state.articles} selectionHandler={this.handleArticleDetails} />} 
+                </div>
+                <div>
+                         <ArticleDetails article={this.state.selectedArticle}/>
+                    </div>
             </form> 
          // return <Urls data={this.state.urls}/>;
                )
         }
       }
 
-      function Urls(props){
+const ArticleDetails = (props) => {
+            const article = props.article;
+            console.log(article);
+            return (
+                <div>
+                    <ul>
+                        <li> {article.headline.main}</li>
+                        <li> {article.headline.kicker}</li>
+                        <li> {article.byline.person[0].organization} {article.byline.person[0].role} {article.byline.person[0].rank} {article.byline.person[0].firstname}         {article.byline.person[0].lastname} </li>
+                        <li> {article.keywords[0].name} {article.keywords[0].rank} {article.keywords[0].value} </li>
+                        <li> {article.byline.original}</li>
+                        <li> {article.word_count}</li>
+                        <li> {article.pub_date}</li>
+                        <li> {article.web_url}</li>
+                    </ul>
+                </div>
+            );
+        }
+        
+ 
+ 
+
+      function Articles(props){
         return (
           <div> 
             {
-              props.urls.map(
-                (url, index) => <Url key={index} url={url}/>
+              props.articles.map(
+                (article, index) => <Article key={index} article={article} clickHandler={props.selectionHandler} />
               )
             }
           </div>
         );
       }
 
-      class Url extends React.Component{
+      class Article extends React.Component{
           
         constructor(props){
               super(props);
@@ -155,6 +213,10 @@
             
               this.onSuccess = this.onSuccess.bind(this);
         }
+          
+          
+             
+          
             onSuccess(responseData){
                 console.log(responseData)
                 let title = responseData.title;
@@ -165,46 +227,52 @@
                 
             }
           
-//          componentDidMount(){
-//            console.log(this.props.url)
-//          $.ajax({
-//              url: 'http://api.linkpreview.net',  
-//              method: 'GET',
-//              data: {
-//                  'key': "5a8de33f3e9b1a8c4c731ee7934db1530bd8866afdc48",
-//                  'q': this.props.url
-//              },
-//              success: this.onSuccess
-//          });
-//        }
-          
-        componentDidMount(){
-            
-            console.log(this.props.url)
+          componentDidMount(){
+            console.log(this.props.article.web_url)
           $.ajax({
               url: 'http://api.linkpreview.net',  
               method: 'GET',
               data: {
-                  'key': "123456",
-                  'q': 'https://www.google.com'
+                  'key': "5a8de33f3e9b1a8c4c731ee7934db1530bd8866afdc48",
+                  'q': this.props.article.web_url
               },
               success: this.onSuccess
           });
         }
           
+//        componentDidMount(){
+//            
+//            console.log(this.props.article.web_url)
+//          $.ajax({
+//              url: 'http://api.linkpreview.net',  
+//              method: 'GET',
+//              data: {
+//                  'key': "123456",
+//                  'q': 'https://www.google.com'
+//              },
+//              success: this.onSuccess
+//          });
+//        }
+          
             render(){
+                 const clickHandler = this.props.clickHandler;
+                const article = this.props.article
                 const tr =  
-                    <div>
+                       <div>
+                    <div >
                         <div>{this.state.title}</div>
                         <div>{this.state.description}</div>
-                        <img style={{width: '150px'}} src={this.state.image}/>
+                        <img style={{width: '150px'}} src={this.state.image} onClick={() => clickHandler(article)}/>
                         <div>{this.state.url}</div>
-                    </div>;
+                    </div>
+                    
+                          </div>;
                 console.log(tr)
                 return tr;
             }
         }
-        
+
+
       
         const root = document.getElementById('root');   
         ReactDOM.render(<App />,  root);
