@@ -27,10 +27,37 @@
       padding: 30px 10px ;
       margin-bottom: 25px;
 }
+                
+footer {
+  border-top: 1px solid white;
+  position: fixed;
+  height: 72px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  font-size: 24px;
+}
 
   .header-right {
      float: none;
   }
+        
+        #input {
+/*            border: 1px solid green;*/
+            margin-left: 20px;
+        }
+        #year {
+            margin-right: 15px;
+        }
+        #month {
+            margin-right: 15px;
+        }
+        #button {
+            
+        }
+        
+        
+
         
         #articleTitle {
             text-align: center;
@@ -55,7 +82,7 @@
             text-overflow: ellipsis;
 /*            text-align: center;*/
             border: 1px solid orange;
-            height: 120px;
+            height: 130px;
 /*            text-overflow: ellipsis;*/
             overflow: inherit;
             width: 100%;
@@ -143,6 +170,19 @@
                 margin-left: 20px;
                 margin-right: 20px;
             }
+            
+            #year {
+    margin-left: 12px;
+    margin-bottom: 10px;
+}
+            
+             #input {
+              width: 250px;
+        }
+            
+            #button {
+    margin: 10px 0px 0px 123px;
+}
         }
     </style>
 </head>
@@ -262,13 +302,16 @@
             
            return(
                <form onSubmit = {this.handleFind}>
-                <label>
+                   <div id = "input">
+                <label id = "lableYear">
                     Year: <input type = "number" id = 'year' onChange = {this.handleChangeYear}/>
                 </label>
-                <label>
+                <label id = "lableMonth">
                     Month: <input type = "number" id = 'month' onChange = {this.handleChangeMonth}/>
                 </label> 
-                <input type="submit" value="Find"  />
+                       
+                <input type="submit" value="Find" id = "button"  />
+                       </div>
                 <div> 
                     {<Articles articles={this.state.articles} selectionHandler={this.handleArticleDetails} />} 
                 </div>
@@ -393,6 +436,7 @@ const ArticleDetails = (props) => {
         ReactDOM.render(<App />,  root);
       
     </script>
+   
 </body>
 
 </html>
