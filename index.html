@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>NYT Explorer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
@@ -12,7 +13,8 @@
          body { 
   margin: 0;
   font-family: Arial;
-}
+        }
+
 
 .headerHead{
       font-size: 35px;
@@ -29,6 +31,119 @@
   .header-right {
      float: none;
   }
+        
+        #articleTitle {
+            text-align: center;
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+        
+        #articlePicture {
+            width: 200px;
+            border-radius: 8px;
+            margin-bottom: 2px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 100%;
+            height: auto;
+
+        }
+        
+        #articleDescription {
+            text-overflow: ellipsis;
+/*            text-align: center;*/
+            border: 1px solid orange;
+            height: 120px;
+/*            text-overflow: ellipsis;*/
+            overflow: inherit;
+            width: 100%;
+            
+        }
+        
+        #articleUrl{
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        
+    
+        .container {
+            float: left;
+            width: 70%;
+            border: 2px solid red;
+            padding: 10px;
+            margin: 20px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(4, 250px);
+        }     
+        
+        .article {
+            border: 1px solid black;
+            margin: 2px;
+            overflow: hidden;
+            
+/*            overflow-wrap: break-word;*/
+            
+        
+        }
+        
+        .details{
+            float: left;
+/*            width: 300px;*/
+            width: 20%;
+            height: 500px;
+             margin-top: 20px;
+            border: 2px solid green;
+            overflow-wrap: break-word;
+            line-height: 1.8;
+        }
+        
+        @media only screen and (max-width: 768px) {
+            /* For tablet: */
+            .container {
+/*            float: left;*/
+            width: 90%;
+            border: 2px solid red;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(10, 250px);
+                
+                
+           }
+            
+            .details{
+                border: 2px solid green;
+                width: 90%;
+                 padding: 10px;
+                margin-left: 20px;
+              
+        }
+        }
+        
+        @media only screen and (max-width: 668px) {
+            /* For mobile: */
+            .container {
+/*                float: left;*/
+                width: 85%;
+                border: 2px solid red;
+                padding: 10px;
+                display: grid;
+                grid-template-columns: repeat(1, 1fr);
+                grid-template-rows: repeat(1, 250px);
+           }
+            
+            .details{
+                border: 2px solid green;
+                width: 85%;
+                 padding: 10px;
+                margin-left: 20px;
+                margin-right: 20px;
+            }
+        }
     </style>
 </head>
 
@@ -45,17 +160,47 @@
         
         constructor(props){
               super(props);
-              this.state = {'urls': [], 
+              this.state = {'articles': [], 
                             'year': '',
-                            'month': ''
+                            'month': '', 
+                            selectedArticle: {
+                                   
+                                   byline: {person: [{'organization':'','role':'','rank':'','firstname':'','lastname':''}], 
+                                            original: ''},
+                                   keywords: [{value:'', name: '', rank: ''}],
+                                   headline: {main: '',
+                                              kicker: ''},
+                                   word_count: '',
+                                   pub_date: '',
+                                   web_url: '',
+
+                           }
+                             
                            };
               this.onSuccess = this.onSuccess.bind(this);
               this.handleChangeYear = this.handleChangeYear.bind(this);
               this.handleChangeMonth = this.handleChangeMonth.bind(this);
-              this.handleFind = this.handleFind.bind(this);
+              this.handleFind = this.handleFind.bind(this);            
+             this.handleArticleDetails = this.handleArticleDetails.bind(this);
+             
             }
 
-              handleChangeYear(event) {
+           handleArticleDetails(item){
+               console.log(item)
+                // debugger;
+                console.log("Hello from handleTableRowClick!");
+                // dodajemo ovde ispis u konzolu item-a
+                // item cemo prvo da stringifikujemo
+                console.log(JSON.stringify(item));
+                // probajte i console.log(JSON.stringify(item,null,2)); za lepsi ispis
+
+                //predajemo stanje Page-u
+                this.setState({selectedArticle: item});
+                               
+            }
+
+         
+           handleChangeYear(event) {
 //                  debugger;
                   this.setState({year: event.target.value});
 //                  console.log(this.state.year)
@@ -71,14 +216,14 @@
               }
           
         onSuccess(responseData) {
-          let urls = [];
-            console.log(urls)
-          for(var i = 0; i < 2; i++) {
+          let articles = [];
+            console.log(articles)
+          for(var i = 0; i < 20; i++) {
             const doc = responseData.response.docs[i];
               console.log(doc)
-            urls.push(doc.web_url);
+            articles.push(doc);
           }
-          this.setState({'urls': urls});
+          this.setState({'articles': articles});
         }
 
         componentDidUpdate(prevProps, prevState){
@@ -101,12 +246,13 @@
         console.log('AJAX')      
             
           $.ajax({
-              url: "https://api.nytimes.com/svc/archive/v1/" + this.state.year+ "/" + this.state.month + ".json",  
+              url: "https://api.nytimes.com/svc/archive/v1/" + this.state.year + "/" + this.state.month + ".json",  
               method: 'GET',
               data: {
                   'api-key': "9b98b8d3102b4c98b7c14e81de2e368e"
               },
               success: this.onSuccess
+              
           });
         }
           
@@ -123,26 +269,53 @@
                     Month: <input type = "number" id = 'month' onChange = {this.handleChangeMonth}/>
                 </label> 
                 <input type="submit" value="Find"  />
-                <div> {<Urls urls={this.state.urls}/>} </div>
+                <div> 
+                    {<Articles articles={this.state.articles} selectionHandler={this.handleArticleDetails} />} 
+                </div>
+                <div className = "details">
+                         <ArticleDetails article={this.state.selectedArticle}/>
+                 </div>
             </form> 
          // return <Urls data={this.state.urls}/>;
                )
         }
       }
 
-      function Urls(props){
+const ArticleDetails = (props) => {
+            const article = props.article;
+            console.log(article);
+            return (
+                <div>
+                    <ul>
+                        <li> {article.headline.main}</li>
+                        <li> {article.headline.kicker}</li>
+                        <li> {article.byline.person[0].organization} {article.byline.person[0].role} {article.byline.person[0].rank} {article.byline.person[0].firstname}         {article.byline.person[0].lastname} </li>
+                        <li> {article.keywords[0].name} {article.keywords[0].rank} {article.keywords[0].value} </li>
+                        <li> {article.byline.original}</li>
+                        <li> {article.word_count}</li>
+                        <li> {article.pub_date}</li>
+                        <li> {article.web_url}</li>
+                    </ul>
+                </div>
+            );
+        }
+        
+ 
+ 
+
+      function Articles(props){
         return (
-          <div> 
+          <div className = "container"> 
             {
-              props.urls.map(
-                (url, index) => <Url key={index} url={url}/>
+              props.articles.map(
+                (article, index) => <Article key={index} article={article} clickHandler={props.selectionHandler} />
               )
             }
           </div>
         );
       }
 
-      class Url extends React.Component{
+      class Article extends React.Component{
           
         constructor(props){
               super(props);
@@ -155,6 +328,10 @@
             
               this.onSuccess = this.onSuccess.bind(this);
         }
+          
+          
+             
+          
             onSuccess(responseData){
                 console.log(responseData)
                 let title = responseData.title;
@@ -166,13 +343,13 @@
             }
           
 //          componentDidMount(){
-//            console.log(this.props.url)
+//            console.log(this.props.article.web_url)
 //          $.ajax({
 //              url: 'http://api.linkpreview.net',  
 //              method: 'GET',
 //              data: {
 //                  'key': "5a8de33f3e9b1a8c4c731ee7934db1530bd8866afdc48",
-//                  'q': this.props.url
+//                  'q': this.props.article.web_url
 //              },
 //              success: this.onSuccess
 //          });
@@ -180,7 +357,7 @@
           
         componentDidMount(){
             
-            console.log(this.props.url)
+            console.log(this.props.article.web_url)
           $.ajax({
               url: 'http://api.linkpreview.net',  
               method: 'GET',
@@ -193,18 +370,24 @@
         }
           
             render(){
-                const tr =  
-                    <div>
-                        <div>{this.state.title}</div>
-                        <div>{this.state.description}</div>
-                        <img style={{width: '150px'}} src={this.state.image}/>
-                        <div>{this.state.url}</div>
-                    </div>;
+                const clickHandler = this.props.clickHandler;
+                const article = this.props.article;
+                
+                const tr = 
+                    
+                        <div className="article">
+                            <div id = "articleTitle">{this.state.title}</div>
+                            <div><img id = "articlePicture"  src={this.state.image} onClick={() => clickHandler(article)}/></div>
+                            <div id = "articleDescription">{this.state.description}</div>                          
+                            <div id = "articleUrl">{this.state.url}</div>
+                        </div>;
+                    
                 console.log(tr)
                 return tr;
             }
         }
-        
+
+
       
         const root = document.getElementById('root');   
         ReactDOM.render(<App />,  root);
