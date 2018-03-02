@@ -13,7 +13,11 @@
          body { 
   margin: 0;
   font-family: Arial;
+    background: linear-gradient(to right, #ffffff, #FCFCFC );         
+             
         }
+        
+        
 .headerHead{
       font-size: 35px;
       font-weight: bold;
@@ -22,6 +26,9 @@
       background-color: #f1f1f1;
       padding: 30px 10px ;
       margin-bottom: 25px;
+    background-color: black;
+    color: darkgray;
+    border-bottom: 2px solid blue;
 }
                 
 
@@ -34,9 +41,12 @@
 /*           left: 0;*/
 /*           bottom: 0;*/
            width: 100%;
-           background-color: gray;
-           color: white;
+           background-color: #f2f2f2;
+           color: #666666;
+             border-top: 1px solid #bfbfbf;
            text-align: center;
+             font-family: initial;
+    font-size: 20px;
 /*           opacity: 0.1;*/
              clear: both;
              height: 60px;
@@ -54,7 +64,7 @@
             background-color: white;
             background-position: 10px 10px; 
             background-repeat: no-repeat;
-            padding: 12px 5px 12px 15px;
+/*            padding: 12px 5px 12px 15px;*/
             height: 30px;
         }
         
@@ -86,7 +96,7 @@
         }
         
         #articlePicture {
-            width: 200px;
+            width: 100px;
             border-radius: 8px;
             margin-bottom: 2px;
             display: block;
@@ -100,18 +110,22 @@
             text-overflow: ellipsis;
 /*            text-align: center;*/
             border: 1px solid orange;
-            height: 130px;
+/*            height: 90px;*/
 /*            text-overflow: ellipsis;*/
-            overflow: inherit;
-            width: 100%;
+/*            overflow: inherit;*/
+/*            width: 100%;*/
+            padding: 5px;
+            font-size: 13px;
             
         }
         
+/*
         #articleUrl{
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
         }
+*/
         
     
         .container {
@@ -121,8 +135,8 @@
             padding: 10px;
             margin: 20px;
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-template-rows: repeat(4, 250px);
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(5, 250px);
         }     
         
         .article {
@@ -167,6 +181,7 @@
                 width: 90%;
                  padding: 10px;
                 margin-left: 20px;
+                margin-bottom: 10px;
               
         }
         }
@@ -189,6 +204,7 @@
                  padding: 10px;
                 margin-left: 20px;
                 margin-right: 20px;
+                margin-bottom: 10px;
             }
             
             #year {
@@ -211,8 +227,8 @@
 
 <body>
     <div class="header">
-        <div class="headerHead">NY Times Explorer</div>
-        <div class="">some text some text some text</div>
+        <div class="headerHead">New York Times Explorer</div>
+        <div class="">Search New York Times articles since 1851.</div>
     </div>
     
     
@@ -326,7 +342,20 @@
                     Year: <input type = "number" id = 'year' className = 'inputField' onChange = {this.handleChangeYear}/>
                 </label>
                 <label id = "lableMonth">
-                    Month: <input type = "number" id = 'month' className = 'inputField' onChange = {this.handleChangeMonth}/>
+                    Month: <select id = 'month' className = 'inputField'  value={this.state.month}  onChange = {this.handleChangeMonth}>
+                                                   <option value="1">Jan</option>
+                                                   <option value="2">Feb</option>
+                                                   <option value="3">Mar</option>
+                                                   <option value="4">Apr</option>
+                                                   <option value="5">May</option>
+                                                   <option value="6">Jun</option> 
+                                                   <option value="7">Jul</option>
+                                                   <option value="8">Aug</option>
+                                                   <option value="9">Sep</option>
+                                                   <option value="10">Oct</option>
+                                                   <option value="11">Nov</option>
+                                                   <option value="12">Dec</option>   
+        </select>
                 </label> 
                        
                 <input type="submit" value="Find" id = "button"  />
@@ -382,7 +411,7 @@ const ArticleDetails = (props) => {
                   title: '',
                   description: '',
                   image: '',
-                  url: ''
+                 // url: ''
               };
             
               this.onSuccess = this.onSuccess.bind(this);
@@ -396,8 +425,8 @@ const ArticleDetails = (props) => {
                 let title = responseData.title;
                 let description = responseData.description;
                 let image = responseData.image;
-                let url = responseData.url;
-                this.setState({'title': title, 'description': description, 'image': image, 'url': url});
+                //let url = responseData.url;
+                this.setState({'title': title, 'description': description, 'image': image});
                 
             }
           
@@ -413,7 +442,7 @@ const ArticleDetails = (props) => {
 //              success: this.onSuccess
 //          });
 //        }
-          
+//          
         componentDidMount(){
             
             console.log(this.props.article.web_url)
@@ -438,7 +467,7 @@ const ArticleDetails = (props) => {
                             <div id = "articleTitle">{this.state.title}</div>
                             <div><img id = "articlePicture"  src={this.state.image} onClick={() => clickHandler(article)}/></div>
                             <div id = "articleDescription">{this.state.description}</div>                          
-                            <div id = "articleUrl">{this.state.url}</div>
+                            
                         </div>;
                     
                 console.log(tr)
@@ -452,7 +481,7 @@ const ArticleDetails = (props) => {
     </script>
     
     <div class="footer">
-  <p>Footer</p>
+  <p>Developed by VS</p>
 </div>
    
 </body>
