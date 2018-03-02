@@ -14,33 +14,49 @@
   margin: 0;
   font-family: Arial;
         }
-
-
 .headerHead{
       font-size: 35px;
       font-weight: bold;
         }
-
 .header {
-
       background-color: #f1f1f1;
       padding: 30px 10px ;
       margin-bottom: 25px;
 }
                 
-footer {
-  border-top: 1px solid white;
-  position: fixed;
-  height: 72px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  font-size: 24px;
-}
 
   .header-right {
      float: none;
   }
+        
+         .footer {
+/*           position: fixed;*/
+/*           left: 0;*/
+/*           bottom: 0;*/
+           width: 100%;
+           background-color: gray;
+           color: white;
+           text-align: center;
+/*           opacity: 0.1;*/
+             clear: both;
+             height: 60px;
+             margin-bottom: 0;
+             
+        }
+        
+        
+        .inputField {
+            width: 20%;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: white;
+            background-position: 10px 10px; 
+            background-repeat: no-repeat;
+            padding: 12px 5px 12px 15px;
+            height: 30px;
+        }
         
         #input {
 /*            border: 1px solid green;*/
@@ -53,11 +69,14 @@ footer {
             margin-right: 15px;
         }
         #button {
-            
+                border-radius: 4px;
+                border: 2px solid #ccc;
+                font-size: 16px;
+                width: 10%;
+                height: 30px;
         }
         
         
-
         
         #articleTitle {
             text-align: center;
@@ -75,7 +94,6 @@ footer {
             margin-right: auto;
             max-width: 100%;
             height: auto;
-
         }
         
         #articleDescription {
@@ -116,6 +134,8 @@ footer {
             
         
         }
+        
+        
         
         .details{
             float: left;
@@ -172,18 +192,20 @@ footer {
             }
             
             #year {
-    margin-left: 12px;
-    margin-bottom: 10px;
+               margin-left: 12px;
+               margin-bottom: 10px;
 }
             
              #input {
-              width: 250px;
+                width: 250px;
         }
             
             #button {
-    margin: 10px 0px 0px 123px;
+                margin: 10px 0px 0px 123px;
 }
         }
+        
+       
     </style>
 </head>
 
@@ -193,9 +215,12 @@ footer {
         <div class="">some text some text some text</div>
     </div>
     
+    
     <div id="root"></div>
-    <script type="text/babel">
+    
+    
 
+    <script type="text/babel">
       class App extends React.Component {
         
         constructor(props){
@@ -205,15 +230,14 @@ footer {
                             'month': '', 
                             selectedArticle: {
                                    
-                                   byline: {person: [{'organization':'','role':'','rank':'','firstname':'','lastname':''}], 
-                                            original: ''},
-                                   keywords: [{value:'', name: '', rank: ''}],
+                                   byline: {original: ''},
+                                  
                                    headline: {main: '',
                                               kicker: ''},
                                    word_count: '',
                                    pub_date: '',
                                    web_url: '',
-
+                                   snippet: '',
                            }
                              
                            };
@@ -224,7 +248,6 @@ footer {
              this.handleArticleDetails = this.handleArticleDetails.bind(this);
              
             }
-
            handleArticleDetails(item){
                console.log(item)
                 // debugger;
@@ -233,26 +256,31 @@ footer {
                 // item cemo prvo da stringifikujemo
                 console.log(JSON.stringify(item));
                 // probajte i console.log(JSON.stringify(item,null,2)); za lepsi ispis
-
                 //predajemo stanje Page-u
                 this.setState({selectedArticle: item});
                                
             }
-
          
            handleChangeYear(event) {
 //                  debugger;
                   this.setState({year: event.target.value});
 //                  console.log(this.state.year)
       }
-
               handleChangeMonth(event) {
                   this.setState({month: event.target.value}); 
       }
               handleFind(event){
-                  //  event.preventDefault();
-                 alert('this' + this.state.month )
-
+                    event.preventDefault();
+//                 alert('this' + this.state.month )
+                   $.ajax({
+              url: "https://api.nytimes.com/svc/archive/v1/" + this.state.year + "/" + this.state.month + ".json",  
+              method: 'GET',
+              data: {
+                  'api-key': "9b98b8d3102b4c98b7c14e81de2e368e"
+              },
+              success: this.onSuccess
+              
+          });
               }
           
         onSuccess(responseData) {
@@ -265,7 +293,6 @@ footer {
           }
           this.setState({'articles': articles});
         }
-
         componentDidUpdate(prevProps, prevState){
         console.log('componentDidUpdate')  
             
@@ -285,15 +312,7 @@ footer {
         
         console.log('AJAX')      
             
-          $.ajax({
-              url: "https://api.nytimes.com/svc/archive/v1/" + this.state.year + "/" + this.state.month + ".json",  
-              method: 'GET',
-              data: {
-                  'api-key': "9b98b8d3102b4c98b7c14e81de2e368e"
-              },
-              success: this.onSuccess
-              
-          });
+         
         }
           
         render(){
@@ -304,40 +323,39 @@ footer {
                <form onSubmit = {this.handleFind}>
                    <div id = "input">
                 <label id = "lableYear">
-                    Year: <input type = "number" id = 'year' onChange = {this.handleChangeYear}/>
+                    Year: <input type = "number" id = 'year' className = 'inputField' onChange = {this.handleChangeYear}/>
                 </label>
                 <label id = "lableMonth">
-                    Month: <input type = "number" id = 'month' onChange = {this.handleChangeMonth}/>
+                    Month: <input type = "number" id = 'month' className = 'inputField' onChange = {this.handleChangeMonth}/>
                 </label> 
                        
                 <input type="submit" value="Find" id = "button"  />
                        </div>
+                   
                 <div> 
                     {<Articles articles={this.state.articles} selectionHandler={this.handleArticleDetails} />} 
                 </div>
                 <div className = "details">
                          <ArticleDetails article={this.state.selectedArticle}/>
                  </div>
+                       
             </form> 
          // return <Urls data={this.state.urls}/>;
                )
         }
       }
-
 const ArticleDetails = (props) => {
             const article = props.article;
             console.log(article);
             return (
                 <div>
                     <ul>
-                        <li> {article.headline.main}</li>
-                        <li> {article.headline.kicker}</li>
-                        <li> {article.byline.person[0].organization} {article.byline.person[0].role} {article.byline.person[0].rank} {article.byline.person[0].firstname}         {article.byline.person[0].lastname} </li>
-                        <li> {article.keywords[0].name} {article.keywords[0].rank} {article.keywords[0].value} </li>
-                        <li> {article.byline.original}</li>
-                        <li> {article.word_count}</li>
-                        <li> {article.pub_date}</li>
-                        <li> {article.web_url}</li>
+                        <li> Headline: {article.headline.main}</li>
+                        <li> Snippet: {article.snippet}</li>
+                        <li> By: {article.byline.original}</li>
+                        <li> Word count: {article.word_count}</li>
+                        <li> Date: {article.pub_date}</li>
+                        <li> Url: {article.web_url}</li>
                     </ul>
                 </div>
             );
@@ -345,7 +363,6 @@ const ArticleDetails = (props) => {
         
  
  
-
       function Articles(props){
         return (
           <div className = "container"> 
@@ -357,7 +374,6 @@ const ArticleDetails = (props) => {
           </div>
         );
       }
-
       class Article extends React.Component{
           
         constructor(props){
@@ -429,13 +445,15 @@ const ArticleDetails = (props) => {
                 return tr;
             }
         }
-
-
       
         const root = document.getElementById('root');   
         ReactDOM.render(<App />,  root);
       
     </script>
+    
+    <div class="footer">
+  <p>Footer</p>
+</div>
    
 </body>
 
