@@ -25,9 +25,6 @@
             }
         
          .footer {
-/*           position: fixed;*/
-/*           left: 0;*/
-/*           bottom: 0;*/
                width: 100%;
                background-color: #f2f2f2;
                color: #666666;
@@ -35,7 +32,6 @@
                text-align: center;
                font-family: initial;
                font-size: 20px;
-    /*         opacity: 0.1;*/
                clear: both;
                height: 60px;
                margin-bottom: 0;
@@ -51,7 +47,6 @@
                 background-color: white;
                 background-position: 10px 10px; 
                 background-repeat: no-repeat;
-    /*            padding: 12px 5px 12px 15px;*/
                 height: 30px;
         }
         
@@ -66,7 +61,6 @@
         
         
         #input {
-/*            border: 1px solid green;*/
                 margin-left: 20px;
         }
         
@@ -110,18 +104,8 @@
         }
         
         #articleDescription {
-    /*            text-overflow: ellipsis;*/
-    /*            text-align: center;*/
-/*                border: 1px solid orange;*/
-    /*            height: 90px;*/
-    /*            text-overflow: ellipsis;*/
-    /*            overflow: inherit;*/
-    /*            width: 100%;*/
-    /*            padding: 5px;*/
                 font-size: 13px;
-    /*            display: block;*/
                 display: -webkit-box;
-                /* max-width: 200px; */
                 -webkit-line-clamp: 5;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
@@ -136,7 +120,6 @@
         .container {
                 float: left;
                 width: 70%;
-/*                border: 2px solid red;*/
                 padding: 10px;
                 margin: 20px;
                 display: grid;
@@ -149,19 +132,14 @@
                 border-radius: 10px;
                 margin: 2px;
                 overflow: hidden;
-             /* overflow-wrap: break-word;*/
                  }
         
         
         
         .details{
             float: left;
-/*            width: 300px;*/
             width: 20%;
-/*            height: 500px;*/
-/*            color: #000099;*/
             margin-top: 20px;
-/*            border: 2px solid green;*/
             overflow-wrap: break-word;
             line-height: 1.8;
             border-left: 1px solid black;
@@ -178,8 +156,8 @@
         
                 @media only screen and (max-width: 768px) {
                         /* For tablet: */
+                    
                             .container {
-                /*            float: left;*/
                             width: 90%;
                             padding: 10px;
                             display: grid;
@@ -205,8 +183,8 @@
 
                 @media only screen and (max-width: 668px) {
                     /* For mobile: */
+                    
                             .container {
-                /*                float: left;*/
                                 width: 85%;
                                 padding: 10px;
                                 display: grid;

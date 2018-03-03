@@ -23,17 +23,13 @@ class App extends React.Component {
              
             }
            handleArticleDetails(item){
-                console.log(item)
-                console.log("Hello from handleTableRowClick!");
-                console.log(JSON.stringify(item));
                 this.setState({selectedArticle: item});
                                
             }
          
            handleChangeYear(event) {
-//                  debugger;
                   this.setState({year: event.target.value});
-//                  console.log(this.state.year)
+
       }
           
            handleChangeMonth(event) {
@@ -64,18 +60,15 @@ class App extends React.Component {
           
         onSuccess(responseData) {
                   let articles = [];
-                  console.log(articles)
                   for(var i = 0; i < 20; i++) {
                     const doc = responseData.response.docs[i];
-                      console.log(doc)
                     articles.push(doc);
                   }
                   this.setState({'articles': articles});
                 }
           
           
-        componentDidUpdate(prevProps, prevState){
-                 console.log('componentDidUpdate')  
+        componentDidUpdate(prevProps, prevState){  
 
                  if(!this.state.year || !this.state.month){
                       return
@@ -91,7 +84,7 @@ class App extends React.Component {
                      return
                  }
 
-                console.log('AJAX')      
+                     
              }
           
          years() {
@@ -104,9 +97,7 @@ class App extends React.Component {
                 return years;
                 } 
           
-        render(){
-            
-           console.log('render')    
+        render(){   
             
            return(
                <form onSubmit = {this.handleFind}>
@@ -149,7 +140,6 @@ class App extends React.Component {
                     </div>
                        
                </form> 
-         // return <Urls data={this.state.urls}/>;
                )
         }
       }
@@ -157,7 +147,7 @@ class App extends React.Component {
 
         const ArticleDetails = (props) => {
                     const article = props.article;
-                    console.log(article);
+            
                     return (
                         <div>
                             <ul>
@@ -204,17 +194,15 @@ class App extends React.Component {
           
           
                 onSuccess(responseData){
-                    console.log(responseData)
                     let title = responseData.title;
                     let description = responseData.description;
                     let image = responseData.image;
-                    //let url = responseData.url;
                     this.setState({'title': title, 'description': description, 'image': image});
 
                 }
           
                 componentDidMount(){
-                      console.log(this.props.article.web_url)
+                     
                       $.ajax({
                           url: 'https://api.linkpreview.net',  
                           method: 'GET',
@@ -226,20 +214,7 @@ class App extends React.Component {
                       });
                     }
           
-//        componentDidMount(){
-//            
-//            console.log(this.props.article.web_url)
-//          $.ajax({
-//              url: 'https://api.linkpreview.net',  
-//              method: 'GET',
-//              data: {
-//                  'key': "123456",
-//                  'q': 'https://www.google.com'
-//              },
-//              success: this.onSuccess
-//          });
-//        }
-//          
+
                 render(){
                       const clickHandler = this.props.clickHandler;
                       const article = this.props.article;
@@ -253,7 +228,6 @@ class App extends React.Component {
 
                             </div>;
 
-                      console.log(tr)
                       return tr;
                 }
             }
