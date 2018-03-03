@@ -331,7 +331,15 @@
           
            handleFind(event){
                    event.preventDefault();
-//                 alert('this' + this.state.month )
+                   if(this.state.year == 1851 &&  this.state.month < 9){
+                       return alert('You can search articles only from september 1851.')
+                   }
+                   if(this.state.year == new Date().getFullYear() && this.state.month > new Date().getMonth()){
+                       return alert("You can't serch articles from the future")
+                   }
+                       
+                   
+
                    $.ajax({
                       url: "https://api.nytimes.com/svc/archive/v1/" + this.state.year + "/" + this.state.month + ".json",  
                       method: 'GET',
@@ -447,7 +455,7 @@
                                 <li> <b>By:</b> {article.byline.original}</li>
                                 <li> <b>Word count:</b> {article.word_count}</li>
                                 <li> <b>Date:</b> {article.pub_date}</li>
-                                <li> <b>Url:</b> <a href = '{article.web_url}' target="_blank" > {article.web_url} </a></li>
+                                <li> <b>Url:</b> <a href = {article.web_url} target="_blank" > {article.web_url} </a></li>
                             </ul>
                         </div>
                     );
