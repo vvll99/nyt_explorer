@@ -502,32 +502,32 @@
 
                 }
           
-//                componentDidMount(){
-//                      console.log(this.props.article.web_url)
-//                      $.ajax({
-//                          url: 'http://api.linkpreview.net',  
-//                          method: 'GET',
-//                          data: {
-//                              'key': "5a8de33f3e9b1a8c4c731ee7934db1530bd8866afdc48",
-//                              'q': this.props.article.web_url
-//                          },
-//                          success: this.onSuccess
-//                      });
-//                    }
-//          
-        componentDidMount(){
-            
-            console.log(this.props.article.web_url)
-          $.ajax({
-              url: 'http://api.linkpreview.net',  
-              method: 'GET',
-              data: {
-                  'key': "123456",
-                  'q': 'https://www.google.com'
-              },
-              success: this.onSuccess
-          });
-        }
+                componentDidMount(){
+                      console.log(this.props.article.web_url)
+                      $.ajax({
+                          url: 'http://api.linkpreview.net',  
+                          method: 'GET',
+                          data: {
+                              'key': "5a8de33f3e9b1a8c4c731ee7934db1530bd8866afdc48",
+                              'q': this.props.article.web_url
+                          },
+                          success: this.onSuccess
+                      });
+                    }
+          
+//        componentDidMount(){
+//            
+//            console.log(this.props.article.web_url)
+//          $.ajax({
+//              url: 'https://api.linkpreview.net',  
+//              method: 'GET',
+//              data: {
+//                  'key': "123456",
+//                  'q': 'https://www.google.com'
+//              },
+//              success: this.onSuccess
+//          });
+//        }
           
                 render(){
                       const clickHandler = this.props.clickHandler;
