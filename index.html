@@ -8,7 +8,8 @@
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
-    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!--    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
         
          body { 
@@ -295,8 +296,7 @@
                             'month': '1', 
                              selectedArticle: {
                                    byline: {original: ''},
-                                   headline: {main: '',
-                                              kicker: ''},
+                                   headline: {main: '',},
                                    word_count: '',
                                    pub_date: '',
                                    web_url: '',
@@ -402,7 +402,7 @@
                   
                     <label id = "labelYear">
                         
-                        <select id = 'year' className = 'inputField' onChange = {this.handleChangeYear}>;
+                        Year: <select id = 'year' className = 'inputField' onChange = {this.handleChangeYear}>;
                              { this.years().map(
                                 (year) =>  <option value={year} key={year}>{year}</option>
                                 )} 
@@ -450,9 +450,9 @@
                     return (
                         <div>
                             <ul>
-                                <li> <b>Headline:</b> {article.headline.main}</li>
+                                <li> <b>Headline:</b> {article.headline ? article.headline.main : ""}</li>
                                 <li> <b>Snippet:</b> {article.snippet}</li>
-                                <li> <b>By:</b> {article.byline.original}</li>
+                                <li> <b>By:</b> {article.byline ? article.byline.original : "" }</li>
                                 <li> <b>Word count:</b> {article.word_count}</li>
                                 <li> <b>Date:</b> {article.pub_date}</li>
                                 <li> <b>Url:</b> <a href = {article.web_url} target="_blank" > {article.web_url} </a></li>
