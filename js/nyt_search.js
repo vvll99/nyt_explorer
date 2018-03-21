@@ -22,6 +22,7 @@ class App extends React.Component {
               this.handleArticleDetails = this.handleArticleDetails.bind(this);
              
             }
+    
            handleArticleDetails(item){
                 this.setState({selectedArticle: item});
                                
